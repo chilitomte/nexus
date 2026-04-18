@@ -7,9 +7,9 @@ export function PartyDetails() {
         <h2 className="mt-5 text-3xl font-semibold tracking-tight text-white">
           Important details
         </h2>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2">
+        <div className="mt-8 grid items-start gap-4 sm:grid-cols-2">
           {partyContent.infoCards.map((card) => (
-            <div key={card.title} className="aurora-card min-h-[11rem]">
+            <div key={card.title} className="aurora-card self-start">
               <p className="text-sm uppercase tracking-[0.24em] text-white/45">
                 {card.title}
               </p>

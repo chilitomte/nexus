@@ -37,29 +37,16 @@ export default async function PartyPage() {
                 </p>
               </div>
             </div>
-            
-          </div>
-          <div className="grid gap-4 md:grid-cols-3">
-            {partyContent.highlights.map((highlight) => (
-              <article key={highlight.label} className="aurora-card">
-                <p className="text-xs uppercase tracking-[0.32em] text-white/50">
-                  {highlight.label}
-                </p>
-                <p className="mt-4 text-xl text-white">{highlight.value}</p>
-              </article>
-            ))}
           </div>
         </header>
         
         <PartyGallery images={galleryImages} />
         <PartyDetails />
         <CoCreation />
+        <footer className="flex justify-center pb-4">
+          <LogoutButton />
+        </footer>
       </div>
-      
-      <div className="fractal-ring fractal-ring-top" />
-      <div className="fractal-ring fractal-ring-bottom" />
-      <div className="grid-burst grid-burst-large" />
-      <LogoutButton />
     </main>
   );
 }

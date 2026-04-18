@@ -10,7 +10,7 @@ export function PartyGallery({ images }: PartyGalleryProps) {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white">
-            Inspiration for being an entity:
+            Inspiration for becoming an entity:
           </h2>
         </div>
       </div>

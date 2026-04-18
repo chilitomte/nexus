@@ -22,7 +22,7 @@ export function LogoutButton() {
       className="rounded-full border border-white/18 bg-white/8 px-4 py-3 text-xs uppercase tracking-[0.28em] text-white/82 transition hover:bg-white/14"
       disabled={isPending}
     >
-      {isPending ? "Closing..." : "Leave the realm"}
+      {isPending ? "Closing..." : "bye bye!"}
     </button>
   );
 }

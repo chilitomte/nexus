@@ -19,9 +19,6 @@ export default async function HomePage() {
           <LoginForm />
         </section>
       </div>
-      <div className="fractal-ring fractal-ring-left" />
-      <div className="fractal-ring fractal-ring-right" />
-      <div className="grid-burst" />
     </main>
   );
 }

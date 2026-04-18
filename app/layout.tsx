@@ -14,8 +14,8 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DMT Elf Communion",
-  description: "A password-protected party portal with RSVP and gallery features.",
+  title: "The Visionary Realm",
+  description: "Your guide to the other side",
 };
 
 export default function RootLayout({
