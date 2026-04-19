@@ -4,7 +4,6 @@ import { cookies } from 'next/headers'
 
 type AttendeeInsert = {
   name: string;
-  avatarSeed: string;
 };
 
 type DatabaseAttendeeRow = {
@@ -67,11 +66,10 @@ export async function getGalleryImages() {
 
   const bucket = getGalleryBucketName();
   const { data, error } = await supabase.storage
-    .from('nexus-images')
-    .list('', { limit: 100})
-console.log({ data, error });
+    .from(bucket)
+    .list('', { limit: 100 })
 
-  if (!data) {
+  if (error || !data) {
     return [] satisfies GalleryImage[];
   }
 
@@ -82,15 +80,14 @@ console.log({ data, error });
         .getPublicUrl(item.name);
 
       return {
-        id: item.id,
+        id: item.id || item.name,
         url: publicUrlData.publicUrl,
-        alt: item.name,
         sortOrder: index,
       };
     });
 }
 
-export async function createAttendee({ name, avatarSeed }: AttendeeInsert) {
+export async function createAttendee({ name }: AttendeeInsert) {
   const cookieStore = await cookies()
   const supabase = createClient(cookieStore)
 

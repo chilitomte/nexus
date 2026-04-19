@@ -5,10 +5,7 @@ export type Attendee = {
 };
 
 export type GalleryImage = {
-  id: string;
   url: string;
-  alt: string;
-  caption?: string;
   sortOrder: number;
 };
 

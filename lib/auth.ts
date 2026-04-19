@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import type { NextRequest } from "next/server";
+import { createClient } from "@/utils/server";
 
 const SESSION_MAX_AGE = 60 * 60 * 24 * 14;
 
@@ -39,24 +40,22 @@ export async function validateSessionToken(token?: string | null, secret = getAu
 
 export async function getSessionStatus() {
   const cookieStore = await cookies();
-  return validateSessionToken(cookieStore.get("party_session")?.value);
+  const supabase = createClient(cookieStore);
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  return Boolean(user);
 }
 
 export async function getRequestSessionStatus(
-  request: Request | NextRequest,
+  _request: Request | NextRequest,
 ) {
-  const cookieHeader = request.headers.get("cookie");
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (!cookieHeader) {
-    return false;
-  }
-
-  const match = cookieHeader
-    .split(";")
-    .map((part) => part.trim())
-    .find((part) => part.startsWith("party_session="));
-
-  const token = match?.slice("party_session=".length) ?? null;
-
-  return validateSessionToken(token);
+  return Boolean(user);
 }

@@ -4,7 +4,7 @@ import { PartyDetails } from "@/components/party-details";
 import { PartyGallery } from "@/components/party-gallery";
 import { RsvpSection } from "@/components/rsvp-section";
 import { getSessionStatus } from "@/lib/auth";
-import { getAttendees, getGalleryImages, isSupabaseConfigured } from "@/lib/data";
+import { getAttendees, getGalleryImages } from "@/lib/data";
 import { partyContent } from "@/lib/party-content";
 import { CoCreation } from "@/components/co-creation";
 
@@ -25,7 +25,10 @@ export default async function PartyPage() {
   return (
     <main className="relative isolate overflow-hidden px-5 py-6 sm:px-8 lg:px-12">
       <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-8">
-        <header className="glass-panel flex flex-col gap-6 p-6 sm:p-8">
+        <header
+          className="glass-panel mx-auto flex w-full flex-col gap-6 p-6 sm:p-8"
+          style={{ maxWidth: 820 }}
+        >
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div className="space-y-4">
               <div className="space-y-3">
@@ -43,6 +46,7 @@ export default async function PartyPage() {
         <PartyGallery images={galleryImages} />
         <PartyDetails />
         <CoCreation />
+        <RsvpSection attendees={attendees} />
         <footer className="flex justify-center pb-4">
           <LogoutButton />
         </footer>

@@ -6,27 +6,29 @@ type PartyGalleryProps = {
 
 export function PartyGallery({ images }: PartyGalleryProps) {
   return (
-    <section className="glass-panel p-6 sm:p-8">
-      {images.length ? (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+    <section
+      className="glass-panel mx-auto w-full p-6 sm:p-8"
+      style={{ maxWidth: 820 }}
+    >
+      <h2 className="mt-5 text-3xl font-semibold text-white">
+          Insipiration on being a magical entity
+        </h2> 
+        <div className="mt-6 flex snap-x gap-4 overflow-x-auto pb-3">
           {images.map((image) => (
-            <figure key={image.id} className="overflow-hidden rounded-[2rem] border border-white/12 bg-white/6">
-              <div className="relative aspect-square">
+            <figure
+              key={image.id}
+              className="flex-none snap-start"
+            >
+              <div className="overflow-hidden rounded-[2rem]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={image.url}
-                  alt={image.alt}
-                  className="h-full w-full object-cover"
+                  className="h-[20rem] w-auto rounded-[2rem] object-contain sm:h-[24rem]"
                 />
               </div>
             </figure>
           ))}
         </div>
-      ) : (
-        <div className="rounded-[2rem] border border-dashed border-white/18 bg-black/18 p-6 text-sm leading-7 text-white/68">
-          Upload images to the configured Supabase bucket and they will appear here automatically.
-        </div>
-      )}
     </section>
   );
 }
