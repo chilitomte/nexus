@@ -1,47 +1,44 @@
 # DMT Realm Party Portal
 
-A small `Next.js` + `TypeScript` + `Tailwind CSS` app for a password-protected theme party page with:
+A small `Next.js` + `TypeScript` + `Tailwind CSS` app for a magic-link-protected theme party page with:
 
-- a shared-password login screen
+- an email magic-link entry screen
 - a private party information page
 - a horizontally scrollable inspiration gallery backed by Supabase Storage
-- an RSVP flow with generated avatars and an attendee wall
+- an RSVP flow tied to the authenticated Supabase user
 
 ## Stack
 
 - `Next.js 16` App Router
 - `TypeScript`
 - `Tailwind CSS`
-- `Supabase` for database + storage
-- `Vercel`-ready server routes and proxy protection
+- `Supabase` for authentication, database, and storage
+- `Vercel`-ready server routes
 
 ## Local setup
 
 1. Copy `.env.example` to `.env.local`.
 2. Fill in:
-   - `PARTY_PASSWORD`
    - `NEXT_PUBLIC_SUPABASE_URL`
-   - `SUPABASE_SERVICE_ROLE_KEY`
+   - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
    - `SUPABASE_GALLERY_BUCKET`
 3. In Supabase SQL editor, run [`supabase/schema.sql`](./supabase/schema.sql).
 4. Create a public storage bucket matching `SUPABASE_GALLERY_BUCKET`.
-5. Upload your gallery photos to paths matching the entries in `lib/party-content.ts`.
-6. Start the app:
+5. Upload your gallery photos to the bucket root.
+6. In Supabase Auth URL configuration, add your local and production callback URLs, for example:
+   - `http://localhost:3000/auth/callback`
+   - `https://your-domain.com/auth/callback`
+7. Start the app:
 
 ```bash
 pnpm dev
 ```
 
+This app does not use `SUPABASE_SERVICE_ROLE_KEY`. The browser and server both work through the publishable key plus the authenticated Supabase session.
+
 ## Gallery workflow
 
-The gallery metadata is intentionally simple for MVP. Update `galleryManifest` inside `lib/party-content.ts` with:
-
-- the storage path
-- alt text
-- optional caption
-- display order
-
-The images themselves live in Supabase Storage. The page converts each path into a public URL at render time.
+The gallery lists every image found in the configured storage bucket and renders them automatically.
 
 ## RSVP data model
 
@@ -50,6 +47,7 @@ The `attendees` table stores:
 - `id`
 - `user_id`
 - `name`
+- `identity`
 - `normalized_name`
 - `created_at`
 
@@ -60,12 +58,15 @@ The `attendees` table stores:
 
 Deploy to Vercel and add the same environment variables there.
 
-- `PARTY_PASSWORD` protects the site
-- `SUPABASE_SERVICE_ROLE_KEY` is only used on the server for attendee reads/writes and gallery URL generation
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+- `SUPABASE_GALLERY_BUCKET`
+
+Also add your production `/auth/callback` URL to Supabase Auth redirect settings.
 
 ## Where to edit content
 
-- Party copy and gallery manifest: `lib/party-content.ts`
+- Party copy: `lib/party-content.ts`
 - Login page: `app/page.tsx`
 - Private party page: `app/party/page.tsx`
 - Styling and visual theme: `app/globals.css`

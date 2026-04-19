@@ -7,7 +7,6 @@ export async function POST() {
   const supabase = createClient(cookieStore);
 
   await supabase.auth.signOut();
-  cookieStore.delete("party_session");
 
   return NextResponse.json({ ok: true });
 }

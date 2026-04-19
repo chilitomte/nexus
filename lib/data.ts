@@ -19,16 +19,12 @@ function getSupabaseUrl() {
   return process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() ?? "";
 }
 
-function getSupabaseServiceRoleKey() {
-  return process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() ?? "";
-}
-
 function getGalleryBucketName() {
   return process.env.SUPABASE_GALLERY_BUCKET?.trim() || "nexus-images";
 }
 
 export function isSupabaseConfigured() {
-  return Boolean(getSupabaseUrl() && getSupabaseServiceRoleKey());
+  return Boolean(getSupabaseUrl());
 }
 
 function mapAttendee(row: DatabaseAttendeeRow): Attendee {
