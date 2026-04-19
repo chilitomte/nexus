@@ -63,23 +63,20 @@ Come join us in the Visionary Realm! We need you to show up as your brightest mo
 export const galleryManifest = [
   {
     id: "mirror-mage",
-    path: "looks/mirror-mage.jpg",
+    path: "IMG_2843.JPG",
     alt: "Mirror mage silhouette",
-    caption: "Reflective textures, cathedral sleeves, and rainbow prisms.",
     sortOrder: 1,
   },
   {
     id: "elf-ceremony",
-    path: "looks/elf-ceremony.jpg",
+    path: "IMG_2845.JPG",
     alt: "Elf ceremony regalia",
-    caption: "Gem clusters, luminous headdresses, and velvet shadows.",
     sortOrder: 2,
   },
   {
     id: "fractal-bloom",
-    path: "looks/fractal-bloom.jpg",
+    path: "IMG_2846.JPG",
     alt: "Fractal bloom bodysuit",
-    caption: "Layer pattern over pattern until the whole fit starts vibrating.",
     sortOrder: 3,
   },
 ] as const;

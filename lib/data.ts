@@ -1,6 +1,6 @@
-import { createClient } from "@supabase/supabase-js";
-import { galleryManifest } from "./party-content";
 import { normalizeGuestName, type Attendee, type GalleryImage } from "./types";
+import { createClient } from '../utils/server'
+import { cookies } from 'next/headers'
 
 type AttendeeInsert = {
   name: string;
@@ -10,7 +10,6 @@ type AttendeeInsert = {
 type DatabaseAttendeeRow = {
   id: string;
   name: string;
-  avatar_seed: string;
   created_at: string;
 };
 
@@ -23,40 +22,24 @@ function getSupabaseServiceRoleKey() {
 }
 
 function getGalleryBucketName() {
-  return process.env.SUPABASE_GALLERY_BUCKET?.trim() || "party-lookbook";
+  return process.env.SUPABASE_GALLERY_BUCKET?.trim() || "nexus-images";
 }
 
 export function isSupabaseConfigured() {
   return Boolean(getSupabaseUrl() && getSupabaseServiceRoleKey());
 }
 
-function getSupabaseAdminClient() {
-  const supabaseUrl = getSupabaseUrl();
-  const serviceRoleKey = getSupabaseServiceRoleKey();
-
-  if (!supabaseUrl || !serviceRoleKey) {
-    return null;
-  }
-
-  return createClient(supabaseUrl, serviceRoleKey, {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-    },
-  });
-}
-
 function mapAttendee(row: DatabaseAttendeeRow): Attendee {
   return {
     id: row.id,
     name: row.name,
-    avatarSeed: row.avatar_seed,
     createdAt: row.created_at,
   };
 }
 
 export async function getAttendees() {
-  const supabase = getSupabaseAdminClient();
+  const cookieStore = await cookies()
+  const supabase = createClient(cookieStore)
 
   if (!supabase) {
     return [] satisfies Attendee[];
@@ -64,7 +47,7 @@ export async function getAttendees() {
 
   const { data, error } = await supabase
     .from("attendees")
-    .select("id,name,avatar_seed,created_at")
+    .select("id,name,created_at")
     .order("created_at", { ascending: true });
 
   if (error || !data) {
@@ -75,29 +58,41 @@ export async function getAttendees() {
 }
 
 export async function getGalleryImages() {
-  const supabase = getSupabaseAdminClient();
+  const cookieStore = await cookies()
+  const supabase = createClient(cookieStore)
 
   if (!supabase) {
     return [] satisfies GalleryImage[];
   }
 
   const bucket = getGalleryBucketName();
+  const { data, error } = await supabase.storage
+    .from('nexus-images')
+    .list('', { limit: 100})
+console.log({ data, error });
 
-  return galleryManifest.map((entry) => {
-    const { data } = supabase.storage.from(bucket).getPublicUrl(entry.path);
+  if (!data) {
+    return [] satisfies GalleryImage[];
+  }
 
-    return {
-      id: entry.id,
-      url: data.publicUrl,
-      alt: entry.alt,
-      caption: entry.caption,
-      sortOrder: entry.sortOrder,
-    };
-  });
+  return data
+    .map((item, index) => {
+      const { data: publicUrlData } = supabase.storage
+        .from(bucket)
+        .getPublicUrl(item.name);
+
+      return {
+        id: item.id,
+        url: publicUrlData.publicUrl,
+        alt: item.name,
+        sortOrder: index,
+      };
+    });
 }
 
 export async function createAttendee({ name, avatarSeed }: AttendeeInsert) {
-  const supabase = getSupabaseAdminClient();
+  const cookieStore = await cookies()
+  const supabase = createClient(cookieStore)
 
   if (!supabase) {
     return {
@@ -114,9 +109,8 @@ export async function createAttendee({ name, avatarSeed }: AttendeeInsert) {
     .insert({
       name,
       normalized_name: normalizedName,
-      avatar_seed: avatarSeed,
     })
-    .select("id,name,avatar_seed,created_at")
+    .select("id,name,created_at")
     .single();
 
   if (error) {

@@ -1,7 +1,6 @@
 export type Attendee = {
   id: string;
   name: string;
-  avatarSeed: string;
   createdAt: string;
 };
 
