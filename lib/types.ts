@@ -5,6 +5,7 @@ export type Attendee = {
 };
 
 export type GalleryImage = {
+  id: string;
   url: string;
   sortOrder: number;
 };
