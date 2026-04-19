@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
-import { createAttendee, isSupabaseConfigured } from "@/lib/data";
+import { createAttendee } from "@/lib/data";
 import { getRequestSessionStatus } from "@/lib/auth";
 
 type RsvpBody = {
   name?: string;
+  identity?: string;
 };
 
 export async function POST(request: Request) {
@@ -15,6 +16,7 @@ export async function POST(request: Request) {
 
   const body = (await request.json().catch(() => null)) as RsvpBody | null;
   const name = body?.name?.trim() ?? "";
+  const identity = body?.identity?.trim() ?? "";
 
   if (name.length < 2 || name.length > 48) {
     return NextResponse.json(
@@ -23,7 +25,14 @@ export async function POST(request: Request) {
     );
   }
 
-  const result = await createAttendee({ name });
+  if (identity.length < 2 || identity.length > 120) {
+    return NextResponse.json(
+      { error: "Tell us who you really are in 2 to 120 characters." },
+      { status: 400 },
+    );
+  }
+
+  const result = await createAttendee({ name, identity });
 
   if (!result.ok) {
     return NextResponse.json({ error: result.error }, { status: result.status });

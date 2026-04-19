@@ -4,7 +4,7 @@ import { PartyDetails } from "@/components/party-details";
 import { PartyGallery } from "@/components/party-gallery";
 import { RsvpSection } from "@/components/rsvp-section";
 import { getSessionStatus } from "@/lib/auth";
-import { getAttendees, getGalleryImages } from "@/lib/data";
+import { getAttendees, getCurrentUserId, getGalleryImages } from "@/lib/data";
 import { partyContent } from "@/lib/party-content";
 import { CoCreation } from "@/components/co-creation";
 
@@ -17,9 +17,10 @@ export default async function PartyPage() {
     redirect("/");
   }
 
-  const [attendees, galleryImages] = await Promise.all([
+  const [attendees, galleryImages, currentUserId] = await Promise.all([
     getAttendees(),
     getGalleryImages(),
+    getCurrentUserId(),
   ]);
 
   return (
@@ -46,7 +47,7 @@ export default async function PartyPage() {
         <PartyGallery images={galleryImages} />
         <PartyDetails />
         <CoCreation />
-        <RsvpSection attendees={attendees} />
+        <RsvpSection attendees={attendees} currentUserId={currentUserId} />
         <footer className="flex justify-center pb-4">
           <LogoutButton />
         </footer>

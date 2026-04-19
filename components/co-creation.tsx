@@ -13,6 +13,9 @@ export function CoCreation() {
         <p className="mt-4 max-w-2xl text-lg leading-8 text-white/78">
           Want to contribute? Reach out to us and let&apos;s make sparkling plans!
         </p>
+        <p className="mt-4 max-w-2xl text-lg leading-8 text-white/78">
+          Perhaps you want to...
+        </p>
         <div className="mt-6 flex flex-col gap-4">
           {partyContent.dreamCards.map((card) => (
             <div key={card.title} className="aurora-card w-full">

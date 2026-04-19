@@ -48,12 +48,13 @@ The images themselves live in Supabase Storage. The page converts each path into
 The `attendees` table stores:
 
 - `id`
+- `user_id`
 - `name`
 - `normalized_name`
-- `avatar_seed`
 - `created_at`
 
-`normalized_name` is unique so duplicate names are blocked case-insensitively.
+`user_id` is unique so each signed-in guest can RSVP only once, and
+`normalized_name` is unique so spirit names are also blocked case-insensitively.
 
 ## Deployment
 

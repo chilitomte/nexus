@@ -1,6 +1,8 @@
 export type Attendee = {
   id: string;
+  userId: string;
   name: string;
+  identity: string;
   createdAt: string;
 };
 

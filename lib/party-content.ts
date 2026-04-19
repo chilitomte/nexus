@@ -45,47 +45,22 @@ Come join us in the Visionary Realm! We need you to show up as your brightest mo
     {
       title: "Decoration",
       description:
-        "Do you wanna help decorate?",
+        "Fill the visionary realm with fabrics, colour, fractals and beautiful creations for everyone to experience!",
     },
     {
       title: "Workshops",
       description:
-        "Do you have an exciting workshop you’ve been waiting to share?",
+        "Bring your fellow entities on a journey or a workshop that you’ve been waiting to share!",
     },
-        {
+    {
       title: "Performance",
       description:
-        "Do you want to put up your life source on display?",
+        "Put yourself and your talents on display to inspire and awe us all!",
+    },
+    {
+      title: "Dreams",
+      description:
+        "Some other crazy idea? Bring it through the portal!",
     }
   ]
 } as const;
-
-export const galleryManifest = [
-  {
-    id: "mirror-mage",
-    path: "IMG_2843.JPG",
-    alt: "Mirror mage silhouette",
-    sortOrder: 1,
-  },
-  {
-    id: "elf-ceremony",
-    path: "IMG_2845.JPG",
-    alt: "Elf ceremony regalia",
-    sortOrder: 2,
-  },
-  {
-    id: "fractal-bloom",
-    path: "IMG_2846.JPG",
-    alt: "Fractal bloom bodysuit",
-    sortOrder: 3,
-  },
-] as const;
-
-export const RSVP_AVATAR_CHOICES = [
-  { seed: "opal-elf", label: "Opal elf" },
-  { seed: "neon-oracle", label: "Neon oracle" },
-  { seed: "prism-shifter", label: "Prism shifter" },
-  { seed: "aurora-trickster", label: "Aurora trickster" },
-  { seed: "echo-gardener", label: "Echo gardener" },
-  { seed: "moss-mystic", label: "Moss mystic" },
-] as const;
