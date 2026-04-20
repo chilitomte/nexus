@@ -16,14 +16,15 @@ Come join us in the Visionary Realm! We need you to show up as your brightest mo
   infoCards: [
     {
       title: "Where?",
-      description:
-        "Södra Förstadsgatan 24, call Miradora on the intercom",
+      description:`Södra Förstadsgatan 24,
+      call Miradora on the intercom and the portal will open`,
     },
     {
       title: "When?",
       description: `Doors open at 19.00
       The opening ceremony starts at 21:00
-      Please be here by 21:00, we shut off the intercom when the ceremony begins, don't miss out!`
+      Please be here by 21:00, we shut off the intercom when the ceremony begins, 
+      don't miss out!`
     },
     {
       title: "Noise",
