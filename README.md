@@ -6,6 +6,7 @@ A small `Next.js` + `TypeScript` + `Tailwind CSS` app for a magic-link-protected
 - a private party information page
 - a horizontally scrollable inspiration gallery backed by Supabase Storage
 - an RSVP flow tied to the authenticated Supabase user
+- a comments section at the bottom of the page with newest messages first
 
 ## Stack
 
@@ -53,6 +54,18 @@ The `attendees` table stores:
 
 `user_id` is unique so each signed-in guest can RSVP only once, and
 `normalized_name` is unique so spirit names are also blocked case-insensitively.
+
+## Comments data model
+
+The `comments` table stores:
+
+- `id`
+- `user_id`
+- `author_name`
+- `body`
+- `created_at`
+
+Comments are shown newest first. Posting a comment currently requires that the signed-in user has already RSVP'd, so each message can be shown with the guest's spirit name.
 
 ## Deployment
 

@@ -4,9 +4,10 @@ import { PartyDetails } from "@/components/party-details";
 import { PartyGallery } from "@/components/party-gallery";
 import { RsvpSection } from "@/components/rsvp-section";
 import { getSessionStatus } from "@/lib/auth";
-import { getAttendees, getCurrentUserId, getGalleryImages } from "@/lib/data";
+import { getAttendees, getComments, getCurrentUserId, getGalleryImages } from "@/lib/data";
 import { partyContent } from "@/lib/party-content";
 import { CoCreation } from "@/components/co-creation";
+import { CommentsSection } from "@/components/comments-section";
 
 export const dynamic = "force-dynamic";
 
@@ -17,9 +18,10 @@ export default async function PartyPage() {
     redirect("/");
   }
 
-  const [attendees, galleryImages, currentUserId] = await Promise.all([
+  const [attendees, galleryImages, comments, currentUserId] = await Promise.all([
     getAttendees(),
     getGalleryImages(),
+    getComments(),
     getCurrentUserId(),
   ]);
 
@@ -48,6 +50,11 @@ export default async function PartyPage() {
         <PartyDetails />
         <CoCreation />
         <RsvpSection attendees={attendees} currentUserId={currentUserId} />
+        <CommentsSection
+          comments={comments}
+          attendees={attendees}
+          currentUserId={currentUserId}
+        />
         <footer className="flex justify-center pb-4">
           <LogoutButton />
         </footer>

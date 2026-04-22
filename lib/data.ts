@@ -1,4 +1,4 @@
-import { normalizeGuestName, type Attendee, type GalleryImage } from "./types";
+import { normalizeGuestName, type Attendee, type Comment, type GalleryImage } from "./types";
 import { createClient } from '../utils/server'
 import { cookies } from 'next/headers'
 
@@ -12,6 +12,18 @@ type DatabaseAttendeeRow = {
   user_id: string;
   name: string;
   identity: string;
+  created_at: string;
+};
+
+type CommentInsert = {
+  body: string;
+};
+
+type DatabaseCommentRow = {
+  id: string;
+  user_id: string;
+  author_name: string;
+  body: string;
   created_at: string;
 };
 
@@ -33,6 +45,16 @@ function mapAttendee(row: DatabaseAttendeeRow): Attendee {
     userId: row.user_id,
     name: row.name,
     identity: row.identity,
+    createdAt: row.created_at,
+  };
+}
+
+function mapComment(row: DatabaseCommentRow): Comment {
+  return {
+    id: row.id,
+    userId: row.user_id,
+    authorName: row.author_name,
+    body: row.body,
     createdAt: row.created_at,
   };
 }
@@ -96,6 +118,26 @@ export async function getGalleryImages() {
         sortOrder: index,
       };
     });
+}
+
+export async function getComments() {
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
+
+  if (!supabase) {
+    return [] satisfies Comment[];
+  }
+
+  const { data, error } = await supabase
+    .from("comments")
+    .select("id,user_id,author_name,body,created_at")
+    .order("created_at", { ascending: false });
+
+  if (error || !data) {
+    return [] satisfies Comment[];
+  }
+
+  return data.map(mapComment);
 }
 
 export async function createAttendee({ name, identity }: AttendeeInsert) {
@@ -166,6 +208,8 @@ export async function createAttendee({ name, identity }: AttendeeInsert) {
       };
     }
 
+    console.log(error)
+
     return {
       ok: false as const,
       status: 500,
@@ -176,5 +220,76 @@ export async function createAttendee({ name, identity }: AttendeeInsert) {
   return {
     ok: true as const,
     attendee: mapAttendee(data),
+  };
+}
+
+export async function createComment({ body }: CommentInsert) {
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
+
+  if (!supabase) {
+    return {
+      ok: false as const,
+      status: 503,
+      error: "Supabase is not configured yet.",
+    };
+  }
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    return {
+      ok: false as const,
+      status: 401,
+      error: "You need to sign in before leaving a message.",
+    };
+  }
+
+  const { data: attendee, error: attendeeError } = await supabase
+    .from("attendees")
+    .select("name")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (attendeeError) {
+    return {
+      ok: false as const,
+      status: 500,
+      error: "We could not verify your spirit name before posting.",
+    };
+  }
+
+  if (!attendee) {
+    return {
+      ok: false as const,
+      status: 403,
+      error: "RSVP before leaving messages in the Nexus.",
+    };
+  }
+
+  const { data, error } = await supabase
+    .from("comments")
+    .insert({
+      user_id: user.id,
+      author_name: attendee.name,
+      body,
+    })
+    .select("id,user_id,author_name,body,created_at")
+    .single();
+
+  if (error) {
+    return {
+      ok: false as const,
+      status: 500,
+      error: "Your message dissolved before it reached the Nexus.",
+    };
+  }
+
+  return {
+    ok: true as const,
+    comment: mapComment(data),
   };
 }

@@ -6,6 +6,14 @@ export type Attendee = {
   createdAt: string;
 };
 
+export type Comment = {
+  id: string;
+  userId: string;
+  authorName: string;
+  body: string;
+  createdAt: string;
+};
+
 export type GalleryImage = {
   id: string;
   url: string;
