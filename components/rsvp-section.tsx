@@ -43,7 +43,7 @@ export function RsvpSection({ attendees, currentUserId }: RsvpSectionProps) {
         <div className="space-y-3">
           {currentAttendee ? (
             <h2 className="text-3xl font-semibold tracking-tight text-white">
-              The beings of the visionary realm
+              Our fellow beings
             </h2>
           ) : (
             <h2 className="text-3xl font-semibold tracking-tight text-white">

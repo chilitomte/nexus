@@ -22,7 +22,7 @@ export function CommentsSection({
         <article className="glass-panel w-full p-6 sm:p-8">
           <div className="space-y-3">
             <h2 className="text-3xl font-semibold tracking-tight text-white">
-              Leave a message for the realm
+              Leave a message
             </h2>
             {!currentAttendee ? (
               <p className="text-base leading-7 text-white/68">
