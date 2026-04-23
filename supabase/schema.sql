@@ -4,7 +4,8 @@ create table public.attendees (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null unique references auth.users (id) on delete cascade,
   name text not null,
-  identity text not null,
+  nickname text not null,
+  comment text not null,
   normalized_name text not null unique,
   created_at timestamptz not null default timezone('utc', now())
 );
